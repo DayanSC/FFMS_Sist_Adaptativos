@@ -1,8 +1,5 @@
-import sys
 import time
 import random
-import os
-import glob
 import argparse
 
 def read_instance(file_path):
@@ -20,14 +17,14 @@ def hamming_distance(s1, s2, threshold):
         return 0 
 
 def evaluate_solution(solution, strings, threshold):
-    """Evalúa una solución para el problema Far From Most String"""
+    """Evalúa una solución"""
     score = 0
     for s in strings:
         score += hamming_distance(solution, s, threshold)
     return score
 
 def greedy_ffmsp(strings, threshold, drate):
-    """Heurística greedy para el problema Far From Most String"""
+    """Heurística greedy"""
     num_strings = len(strings)
     string_length = len(strings[0]) # m
     
@@ -35,7 +32,7 @@ def greedy_ffmsp(strings, threshold, drate):
     greedy_string = []
     
     for i in range(string_length):
-        # random value between 0 and 1
+        # Valor aleatorio entre 0 y 1
         chance = random.random() < drate
         
         if chance:
@@ -73,10 +70,13 @@ def main():
     instance = args.instance
     
     strings = read_instance(instance)
+    
     start_time = time.time()
     solution = greedy_ffmsp(strings, threshold, drate)
     end_time = time.time()
+    
     score = evaluate_solution(solution, strings, threshold)
+    
     #print(f"Solution: {solution}")
     print(f"Score: {score}")
     print(f"Time: {end_time - start_time:.12f}")
