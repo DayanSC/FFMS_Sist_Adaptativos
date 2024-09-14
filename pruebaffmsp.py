@@ -10,7 +10,8 @@ def read_instance(file_path):
 def ffmsp_randomized_greedy_heuristic(strings, m, threshold):
     alphabet = ['C', 'G', 'T', 'A']
     result = []
-    
+    num_strings = len(strings)
+
     for j in range(m):
         occurrences = {char: 0 for char in alphabet}
         for string in strings:
@@ -19,15 +20,18 @@ def ffmsp_randomized_greedy_heuristic(strings, m, threshold):
         # Ordenar caracteres por frecuencia ascendente
         sorted_chars = sorted(occurrences.items(), key=lambda x: x[1])
         
+        # Ordenar caracteres por frecuencia descendente
+        #sorted_chars = sorted(occurrences.items(), key=lambda x: -x[1])
+
         # Seleccionar caracteres hasta alcanzar el umbral
-        total_occurrences = sum(occurrences.values())
+        #total_occurrences = sum(occurrences.values())
         cumulative_occurrences = 0
         candidates = []
         
         for char, count in sorted_chars:
             candidates.append(char)
             cumulative_occurrences += count
-            if cumulative_occurrences / total_occurrences >= threshold:
+            if cumulative_occurrences / num_strings >= threshold:
                 break
         
         # Elegir aleatoriamente entre los candidatos
