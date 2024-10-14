@@ -41,11 +41,8 @@ def construct_greedy_randomized_solution(strings, drate):
             for s in strings:
                 counts[s[i]] += 1
             
-            # Sort characters by frequency (least frequent first)
-            sorted_chars = sorted(counts.items(), key=lambda x: x[1])
-        
-            # Choose the least frequent character
-            greedy_string.append(sorted_chars[0][0])
+            min_char = min(counts, key=counts.get)
+            greedy_string.append(min_char)
         else:
             greedy_string.append(random.choice(['A', 'C', 'G', 'T']))
             
@@ -103,7 +100,7 @@ def main():
     parser.add_argument('-i', '--instance', required=True, help="Path to the problem instance file")
     parser.add_argument('-t', '--time', type=int, required=True, help="Maximum execution time in seconds")
     parser.add_argument('-th', '--threshold', type=float, required=True, help="Threshold percentage (e.g., 0.75, 0.80, 0.85)")
-    parser.add_argument('-dr', '--drate', type=float, default=0.8, help="drate parameter for GRASP (default: 0.8)")
+    parser.add_argument('-dr', '--drate', type=float, default=0.9, help="drate parameter for GRASP (default: 0.9)")
     
     args = parser.parse_args()
 
