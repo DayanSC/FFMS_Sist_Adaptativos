@@ -40,7 +40,7 @@ def construct_greedy_randomized_solution(strings, drate):
             counts = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
             for s in strings:
                 counts[s[i]] += 1
-            
+            # Choose the least frequent character
             min_char = min(counts, key=counts.get)
             greedy_string.append(min_char)
         else:
