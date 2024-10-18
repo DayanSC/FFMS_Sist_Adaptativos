@@ -9,7 +9,7 @@
 #include <tuple>
 #include <iomanip>
 
-// Lee la instancia del problema desde el archivo dado
+// Read an instance from a file
 std::vector<std::string> read_instance(const std::string& file_path) {
     std::vector<std::string> strings;
     std::ifstream file(file_path);
@@ -23,7 +23,7 @@ std::vector<std::string> read_instance(const std::string& file_path) {
     return strings;
 }
 
-// Calcula la distancia de Hamming entre dos cadenas
+// Calculate the Hamming distance between two strings
 int hamming_distance(const std::string& s1, const std::string& s2, double threshold) {
     int hd = 0;
     for (size_t i = 0; i < s1.size(); ++i) {
@@ -38,7 +38,7 @@ int hamming_distance(const std::string& s1, const std::string& s2, double thresh
     }
 }
 
-// Evalúa una solución
+// Evaluate a solution by calculating the sum of the Hamming distances
 int evaluate_solution(const std::string& solution, const std::vector<std::string>& strings, double threshold) {
     int score = 0;
     for (const auto& s : strings) {
@@ -47,14 +47,14 @@ int evaluate_solution(const std::string& solution, const std::vector<std::string
     return score;
 }
 
-// Construcción aleatoria codiciosa para FFMSP
+// Construct a greedy randomized solution
 std::string construct_greedy_randomized_solution(const std::vector<std::string>& strings, double drate) {
     size_t num_strings = strings.size();
     size_t string_length = strings[0].size();
 
     std::string greedy_string;
 
-    // Generadores aleatorios
+    // Random number generator
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0, 1);
@@ -65,12 +65,12 @@ std::string construct_greedy_randomized_solution(const std::vector<std::string>&
         double chance = dis(gen);
 
         if (chance < drate) {
-            // Cuenta la frecuencia de cada carácter en la posición i
+            // Count the frequency of each character
             std::map<char, int> counts = { {'A', 0}, {'C', 0}, {'G', 0}, {'T', 0} };
             for (const auto& s : strings) {
                 counts[s[i]] += 1;
             }
-            // Encuentra el carácter con la frecuencia mínima
+            // Find the character with the minimum frequency
             char min_char = 'A';
             int min_count = counts['A'];
             for (const auto& pair : counts) {
@@ -81,7 +81,7 @@ std::string construct_greedy_randomized_solution(const std::vector<std::string>&
             }
             greedy_string.push_back(min_char);
         } else {
-            // Selecciona un carácter aleatorio
+            // Select a random character
             greedy_string.push_back(nucleotides[char_dis(gen)]);
         }
     }
@@ -89,21 +89,21 @@ std::string construct_greedy_randomized_solution(const std::vector<std::string>&
     return greedy_string;
 }
 
-// Búsqueda local para FFMSP
+// Local search for FFMSP
 std::pair<std::string, int> local_search(const std::string& initial_solution, const std::vector<std::string>& strings, double threshold) {
     bool improved = true;
     std::string solution = initial_solution;
     int best_score = evaluate_solution(solution, strings, threshold);
-
+    // Iterative improvement
     while (improved) {
         improved = false;
         std::string best_solution = solution;
-        for (size_t i = 0; i < solution.size(); ++i) {
-            for (char new_char : { 'A', 'C', 'G', 'T' }) {
+        for (size_t i = 0; i < solution.size(); ++i) { // For each character in the solution
+            for (char new_char : { 'A', 'C', 'G', 'T' }) { // For each possible character
                 if (new_char != solution[i]) {
-                    std::string new_solution = solution;
+                    std::string new_solution = solution; 
                     new_solution[i] = new_char;
-                    int new_score = evaluate_solution(new_solution, strings, threshold);
+                    int new_score = evaluate_solution(new_solution, strings, threshold); // Evaluate the new solution
                     if (new_score > best_score) {
                         best_solution = new_solution;
                         best_score = new_score;
@@ -118,40 +118,39 @@ std::pair<std::string, int> local_search(const std::string& initial_solution, co
     return { solution, best_score };
 }
 
-// GRASP para FFMSP
+// GRASP for FFMSP
 std::tuple<std::string, int, double> grasp(const std::vector<std::string>& strings, double threshold, double drate, int max_time) {
     auto start_time = std::chrono::steady_clock::now();
     std::string best_solution;
     int best_score = 0;
     double best_time = 0.0;
 
-    //std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
+    std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
 
     while (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start_time).count() < max_time) {
-        // Fase de construcción
+        // Construction phase
         std::string solution = construct_greedy_randomized_solution(strings, drate);
 
-        // Fase de búsqueda local
+        // Local search phase
         auto [local_solution, score] = local_search(solution, strings, threshold);
 
         if (score > best_score) {
             best_solution = local_solution;
             best_score = score;
             best_time = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::steady_clock::now() - start_time).count();
-            //std::cout << "New solution found" << std::endl;
-            //std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
+            std::cout << "New solution found" << std::endl;
+            std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
         }
     }
 
     return { best_solution, best_score, best_time };
 }
 
-/*int main(int argc, char* argv[]) {
-    // Parseo de argumentos de línea de comandos
+int main(int argc, char* argv[]) {
     std::string instance;
     int max_time = 0;
     double threshold = 0.0;
-    double drate = 0.9;
+    double drate = 0.95;
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -174,10 +173,8 @@ std::tuple<std::string, int, double> grasp(const std::vector<std::string>& strin
         return 1;
     }
 
-    // Lee la instancia
     std::vector<std::string> strings = read_instance(instance);
 
-    // Ejecuta GRASP
     auto [solution, score, time_found] = grasp(strings, threshold, drate, max_time);
 
     std::cout << "Best solution found" << std::endl;
@@ -185,4 +182,4 @@ std::tuple<std::string, int, double> grasp(const std::vector<std::string>& strin
     std::cout << "Solution: " << solution << std::endl;
 
     return 0;
-}*/
+}

@@ -61,9 +61,9 @@ inline void display_progress(std::int64_t u, std::int64_t v) {
 }
 
 int main() {
-    double threshold = 0.75;
-    std::string threshold_string = "075";
-    double drate = 0.95;
+    double threshold = 0.85;
+    std::string threshold_string = "085";
+    double drate = 1.0;
     int max_time = 10;
     // imprimir treshold, drate y max_time en una linea
     std::cout << "Threshold: " << threshold << ", Drate: " << drate << ", Max time: " << max_time << std::endl;
@@ -103,27 +103,15 @@ int main() {
     for (const auto& [archivos, nombre] : archivos_matrix) {
         std::vector<std::string> strings;
         for (const auto& archivo : archivos) {
-            display_progress(++cont, 600);
-            // imprimir nombre del archivo
-            //std::cout << "Archivo: " << archivo << std::endl;
+            display_progress(++cont, 900);
             strings = read_instance(archivo);
             auto solution= construct_greedy_randomized_solution(strings, drate);
             scores.push_back(evaluate_solution(solution, strings, threshold));
-            //if(cont < 3) break;
         }
-        std::cout << "dataset: " << nombre << " completo!" << std::endl;
-        int tam = strings[0].size();
-        std::cout << "dataset: " << nombre << std::endl;
+        int tam = archivos.size();
         double media = average(scores, tam);
-        std::cout << std::string(50, '-') << std::endl;
-        std::cout << "dataset: " << nombre << std::endl;
-        std::cout << "average: " << media << std::endl;
         double sd = standard_deviation(scores, media, tam);
-        std::cout << "standard deviation: " << sd << std::endl;
-        std::cout << std::string(50, '-') << std::endl;
-        // Escribe los resultados en el archivo CSV
         csv_file << nombre << "," << media << "," << sd << "," << std::endl;
-        std::cout << "Calculos completos!" << std::endl;
         scores.clear();
     }
     
