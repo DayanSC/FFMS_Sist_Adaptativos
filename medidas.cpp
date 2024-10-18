@@ -1,5 +1,7 @@
 // g++ ffms-mh.cpp medidas.cpp -o medidas
 // ./medidas
+// ajustar threshold, drate y max_time en main
+// tambien threshold_string en main
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -70,12 +72,13 @@ int main() {
     std::cout << "Threshold: " << threshold << ", Drate: " << drate << ", Max time: " << max_time << std::endl;
     
     std::vector<double> scores;
+    std::vector<double> time;
     std::string path = "datasets/";
     std::vector<std::string> archivos_aux;
     
     std::ofstream csv_file;
     csv_file.open("output_" + threshold_string + ".csv");
-    csv_file << "dataset,t_mean,t_stdev" << std::endl; // Encabezados del CSV
+    csv_file << "dataset,t_mean_sol,t_stdev,t_mean" << std::endl; // Encabezados del CSV
     
     for (const auto& entry : fs::directory_iterator(path)) {
         if (entry.path().extension() == ".txt" && entry.path().filename() != "readme.txt" && entry.path().filename() != "test.txt") {
@@ -108,9 +111,10 @@ int main() {
             // imprimir nombre del archivo
             //std::cout << "Archivo: " << archivo << std::endl;
             strings = read_instance(archivo);
-            // imprimir cantidad de strings
             auto [solution, score, time_found] = grasp(strings, threshold, drate, max_time);
             scores.push_back(evaluate_solution(solution, strings, threshold));
+            time.push_back(time_found);
+            //if(cont < 3) break;
         }
         std::cout << "dataset: " << nombre << " completo!" << std::endl;
         int tam = strings[0].size();
@@ -121,10 +125,14 @@ int main() {
         std::cout << "average: " << media << std::endl;
         double sd = standard_deviation(scores, media, tam);
         std::cout << "standard deviation: " << sd << std::endl;
+        double media_time = average(time, tam);
+        std::cout << "average time: " << media_time << std::endl;
         std::cout << std::string(50, '-') << std::endl;
         // Escribe los resultados en el archivo CSV
-        csv_file << nombre << "," << media << "," << sd << std::endl;
+        csv_file << nombre << "," << media << "," << sd << "," << media_time << std::endl;
         std::cout << "Calculos completos!" << std::endl;
+        scores.clear();
+        time.clear();
     }
     
     csv_file.close();

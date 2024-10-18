@@ -118,14 +118,14 @@ std::pair<std::string, int> local_search(const std::string& initial_solution, co
     return { solution, best_score };
 }
 
-// GRASP para FFMSP con comportamiento Any-Time
+// GRASP para FFMSP
 std::tuple<std::string, int, double> grasp(const std::vector<std::string>& strings, double threshold, double drate, int max_time) {
     auto start_time = std::chrono::steady_clock::now();
     std::string best_solution;
     int best_score = 0;
     double best_time = 0.0;
 
-    std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
+    //std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
 
     while (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start_time).count() < max_time) {
         // Fase de construcción
@@ -138,15 +138,15 @@ std::tuple<std::string, int, double> grasp(const std::vector<std::string>& strin
             best_solution = local_solution;
             best_score = score;
             best_time = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::steady_clock::now() - start_time).count();
-            std::cout << "New solution found" << std::endl;
-            std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
+            //std::cout << "New solution found" << std::endl;
+            //std::cout << "Score: " << best_score << ", Time: " << std::fixed << std::setprecision(12) << best_time << std::endl;
         }
     }
 
     return { best_solution, best_score, best_time };
 }
 
-int main(int argc, char* argv[]) {
+/*int main(int argc, char* argv[]) {
     // Parseo de argumentos de línea de comandos
     std::string instance;
     int max_time = 0;
@@ -185,4 +185,4 @@ int main(int argc, char* argv[]) {
     std::cout << "Solution: " << solution << std::endl;
 
     return 0;
-}
+}*/
