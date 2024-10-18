@@ -63,6 +63,7 @@ inline void display_progress(std::int64_t u, std::int64_t v) {
 
 int main() {
     double threshold = 0.75;
+    std::string threshold_string = "075";
     double drate = 0.95;
     int max_time = 10;
     // imprimir treshold, drate y max_time en una linea
@@ -73,7 +74,7 @@ int main() {
     std::vector<std::string> archivos_aux;
     
     std::ofstream csv_file;
-    csv_file.open("output.csv");
+    csv_file.open("output_" + threshold_string + ".csv");
     csv_file << "dataset,t_mean,t_stdev" << std::endl; // Encabezados del CSV
     
     for (const auto& entry : fs::directory_iterator(path)) {
@@ -110,9 +111,6 @@ int main() {
             // imprimir cantidad de strings
             auto [solution, score, time_found] = grasp(strings, threshold, drate, max_time);
             scores.push_back(evaluate_solution(solution, strings, threshold));
-            if(cont == 3) {
-                break;
-            }
         }
         std::cout << "dataset: " << nombre << " completo!" << std::endl;
         int tam = strings[0].size();
