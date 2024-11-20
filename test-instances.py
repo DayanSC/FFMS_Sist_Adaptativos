@@ -37,6 +37,7 @@ def run_experiments(path, threshold, population_size,
     # Run experiments for each dataset group
     for archivos, nombre in archivos_matrix:
         scores = []
+        time = []
         
         for archivo in archivos:
             # Read instance
@@ -54,18 +55,21 @@ def run_experiments(path, threshold, population_size,
             )
             
             scores.append(score)
+            time.append(time_found)
             #print(f"Dataset: {nombre}, Archivo: {archivo}, Score: {score}, Time: {time_found:.2f}")
             
         # Calculate statistics
-        print(len(scores))
+        #print(len(scores))
         media = average(scores)
         sd = standar_deviation(scores, media)
+        media_time = average(time)
         
         # Print results
         print('-'*50)
         print(f"Dataset: {nombre}")
         print(f"Average: {media:.6f}")
         print(f"Standard deviation: {sd:.6f}")
+        print(f"Average time: {media_time:.6f}")
         print('-'*50)
 
 if __name__ == "__main__":
