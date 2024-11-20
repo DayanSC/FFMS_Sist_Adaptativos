@@ -188,6 +188,7 @@ def genetic_algorithm(strings, threshold, population_size, crossover_rate, mutat
     
     return best_solution, best_score, best_time
 
+'''
 def main():
     parser = argparse.ArgumentParser(description="Genetic Algorithm for FFMSP")
     parser.add_argument('-i', '--instance', required=True, help="Path to the problem instance file")
@@ -220,3 +221,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+'''
