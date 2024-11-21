@@ -94,7 +94,7 @@ def construct_greedy_randomized_solution(strings, drate):
     return ''.join(greedy_string)
 
 def genetic_algorithm(strings, threshold, population_size, crossover_rate, mutation_rate, max_time, drate):
-    """Enhanced Genetic Algorithm for FFMSP"""
+    """Algorithm for FFMSP"""
     start_time = time.time()
     best_solution = None
     best_score = 0
@@ -105,7 +105,7 @@ def genetic_algorithm(strings, threshold, population_size, crossover_rate, mutat
     string_length = len(strings[0])
     alphabet = ['A', 'C', 'G', 'T']
     
-    # Initialize population with diversity
+    # Initialize population
     population = []
     seen_solutions = set()
     
@@ -125,7 +125,7 @@ def genetic_algorithm(strings, threshold, population_size, crossover_rate, mutat
             best_score = score
             best_time = time.time() - start_time
     
-    #print(f"Initial best score: {best_score}")
+    print(f"Initial best score: {best_score}")
     generation = 0
     
     while time.time() - start_time < max_time:
@@ -166,8 +166,8 @@ def genetic_algorithm(strings, threshold, population_size, crossover_rate, mutat
                         best_score = score
                         best_time = time.time() - start_time
                         generations_without_improvement = 0
-                        #print(f"New best solution found in generation {generation}")
-                        #print(f"Score: {best_score}, Time: {best_time:.2f}")
+                        print(f"New best solution found in generation {generation}")
+                        print(f"Score: {best_score}, Time: {best_time:.2f}")
         
         # Update population and fitness
         population = new_population
@@ -188,16 +188,16 @@ def genetic_algorithm(strings, threshold, population_size, crossover_rate, mutat
     
     return best_solution, best_score, best_time
 
-'''
+
 def main():
     parser = argparse.ArgumentParser(description="Genetic Algorithm for FFMSP")
     parser.add_argument('-i', '--instance', required=True, help="Path to the problem instance file")
     parser.add_argument('-t', '--time', type=int, required=True, help="Maximum execution time in seconds")
     parser.add_argument('-th', '--threshold', type=float, required=True, help="Threshold percentage (e.g., 0.75, 0.80, 0.85)")
-    parser.add_argument('-p', '--population_size', type=int, default=100, help="Population size (default: 100)")
-    parser.add_argument('-c', '--crossover_rate', type=float, default=0.85, help="Crossover rate (default: 0.85)")
-    parser.add_argument('-m', '--mutation_rate', type=float, default=0.05, help="Mutation rate (default: 0.05)")
-    parser.add_argument('-dr', '--drate', type=float, default=0.8, help="drate parameter for GA (default: 0.8)")
+    parser.add_argument('-p', '--population_size', type=int, default=150, help="Population size")
+    parser.add_argument('-c', '--crossover_rate', type=float, default=0.9742, help="Crossover rate")
+    parser.add_argument('-m', '--mutation_rate', type=float, default=0.0102, help="Mutation rate")
+    parser.add_argument('-dr', '--drate', type=float, default=0.656, help="drate parameter for GA")
 
     args = parser.parse_args()
     
@@ -213,12 +213,12 @@ def main():
         args.drate
     )
     
-    #print("\nFinal Results:")
-    #print(f"Score: {score}")
-    #print(f"Time found: {time_found:.2f} seconds")
-    #print(f"Solution: {solution}")
-    print(score)
+    print("\nBest solution found:")
+    print(f"Score: {score}")
+    print(f"Time found: {time_found:.4f}")
+    print(f"Solution: {solution}")
+    
+    # print(score) This line only for tuning purposes
 
 if __name__ == "__main__":
     main()
-'''
