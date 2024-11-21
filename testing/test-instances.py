@@ -3,7 +3,7 @@ import glob
 import os
 import statistics
 from typing import List, Tuple
-from ffmsp_solver import genetic_algorithm, read_instance
+from ffmsp_ag import genetic_algorithm, read_instance
 
 def average(scores: List[int]) -> float:
     """Calculate average score"""
