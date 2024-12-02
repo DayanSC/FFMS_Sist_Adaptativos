@@ -86,7 +86,7 @@ def construct_solution(pheromone, heuristic, alpha, beta, string_length):
         probs /= probs.sum()
         letter = random.choices(alphabet, weights=probs)[0]
         solution.append(letter)
-    return solution
+    return ''.join(solution)
 
 def update_pheromone(pheromone, solutions, scores, evaporation_rate):
     char_to_idx = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
