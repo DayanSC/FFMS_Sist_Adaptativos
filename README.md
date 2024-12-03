@@ -29,18 +29,20 @@ testing/
 
 ## Files
 
-- ffms-mh.cpp: C++ implementation of the FFMSP problem using a metaheuristic approach.
-- FFMS-greedy.py: Python implementation of the greedy algorithm for the FFMSP problem.
+- FFMSP_mh.cpp: C++ implementation of the FFMSP problem using a metaheuristic approach.
+- FFMSP-greedy.py: Python implementation of the greedy algorithm for the FFMSP problem.
 - FFMSP-mh.py: Python implementation of the metaheuristic approach for the FFMSP problem.
+- FFMSP-ag.py: Python implementation of the genetic algorithm for the FFMSP problem.
+- FFMSP-aco.py: Python implementation of the ant colony optimization algorithm for the FFMSP problem.
 - test-instances.py: Script to test different instances of the problem using the provided datasets.
-- medidas.cpp
-- medidasT1.cpp
 
 ## Getting Started
 
 ### Prerequisites
 
 - C++ compiler (e.g., g++)
+- Python 3
+- NumPy
 
 ### Building the C++ Project
 
@@ -55,3 +57,13 @@ g++ -o ffms-mh src-cpp/ffms-mh.cpp
 ```bash
 ./ffms-mh -i <dataset_file> -t <time> -th <threshold> -dr <determinism-rate>
 ```
+
+### Running the Python Scripts
+
+To run the Python scripts, use the following command:
+
+```bash
+python src-python/<*.py>
+```
+**Note:** The Python scripts require datasets to be in the same directory.
+
